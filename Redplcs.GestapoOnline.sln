@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redplcs.GestapoOnline.Service.Application", "src\Service\Application\src\Redplcs.GestapoOnline.Service.Application.csproj", "{8914910D-EC6D-4E98-87BF-A13CE901870B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrudpProtocol", "PrudpProtocol", "{BC275D20-8F88-4985-AAE2-F9048DEFD16B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redplcs.GestapoOnline.Service.PrudpProtocol", "src\Service\PrudpProtocol\src\Redplcs.GestapoOnline.Service.PrudpProtocol.csproj", "{BB171BB9-6BFC-48FB-B8F9-71A0FAA5465D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,10 +28,16 @@ Global
 		{8914910D-EC6D-4E98-87BF-A13CE901870B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8914910D-EC6D-4E98-87BF-A13CE901870B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8914910D-EC6D-4E98-87BF-A13CE901870B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB171BB9-6BFC-48FB-B8F9-71A0FAA5465D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB171BB9-6BFC-48FB-B8F9-71A0FAA5465D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB171BB9-6BFC-48FB-B8F9-71A0FAA5465D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB171BB9-6BFC-48FB-B8F9-71A0FAA5465D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E80F1990-EEA2-4D5F-A32D-C97543708D45} = {31188FFA-04A1-4106-9621-2F8167BB9233}
 		{5BB84343-09AB-4A51-BE55-522E7CAA947F} = {E80F1990-EEA2-4D5F-A32D-C97543708D45}
 		{8914910D-EC6D-4E98-87BF-A13CE901870B} = {5BB84343-09AB-4A51-BE55-522E7CAA947F}
+		{BC275D20-8F88-4985-AAE2-F9048DEFD16B} = {E80F1990-EEA2-4D5F-A32D-C97543708D45}
+		{BB171BB9-6BFC-48FB-B8F9-71A0FAA5465D} = {BC275D20-8F88-4985-AAE2-F9048DEFD16B}
 	EndGlobalSection
 EndGlobal
