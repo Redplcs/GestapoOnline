@@ -7,27 +7,19 @@ using var listener = new UdpClient(listeningPort);
 
 while (true)
 {
-	var receiveResult = await listener.ReceiveAsync();
+	var datagram = await listener.ReceiveAsync();
 
-	LogReceivedDatagram(receiveResult);
+	Console.WriteLine("Received packet with {0} bytes from '{1}'.", datagram.Buffer.Length, datagram.RemoteEndPoint);
 
-	var sourcePort = PrudpVirtualPort.Read(receiveResult.Buffer[0]);
-	var destinationPort = PrudpVirtualPort.Read(receiveResult.Buffer[1]);
-	var (type, flags) = PrudpPacketTypeAndFlags.Deserialize(receiveResult.Buffer[2]);
+	var sourcePort = PrudpVirtualPort.Read(datagram.Buffer[0]);
+	var destinationPort = PrudpVirtualPort.Read(datagram.Buffer[1]);
+	var (type, flags) = PrudpPacketTypeAndFlags.Deserialize(datagram.Buffer[2]);
 
-	LogVirtualPort(sourcePort, nameof(sourcePort));
-	LogVirtualPort(destinationPort, nameof(destinationPort));
+	Console.WriteLine("StreamId: {0}\tStreamType: {1}\t// Source port", sourcePort.StreamId, sourcePort.StreamType);
+	Console.WriteLine("StreamId: {0}\tStreamType: {1}\t// Destination port", destinationPort.StreamId, destinationPort.StreamType);
+	Console.WriteLine("Type: {0}", type);
+	Console.WriteLine("Flags: {0}", flags);
+	Console.WriteLine("Raw: {0}", BitConverter.ToString(datagram.Buffer));
 
 	Console.WriteLine();
-}
-
-static void LogReceivedDatagram(UdpReceiveResult result)
-{
-	Console.WriteLine("Received {0} bytes from {1}", result.Buffer.Length, result.RemoteEndPoint);
-	Console.WriteLine(BitConverter.ToString(result.Buffer).Replace("-", ", "));
-}
-
-static void LogVirtualPort(PrudpVirtualPort port, string header)
-{
-	Console.WriteLine("{0}\t|\tStreamId = {1}\tStreamType = {2}", header, port.StreamId, port.StreamType);
 }
