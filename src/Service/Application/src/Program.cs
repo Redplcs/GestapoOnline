@@ -11,8 +11,8 @@ while (true)
 
 	Console.WriteLine("Received packet with {0} bytes from '{1}'.", datagram.Buffer.Length, datagram.RemoteEndPoint);
 
-	var sourcePort = PrudpVirtualPort.Read(datagram.Buffer[0]);
-	var destinationPort = PrudpVirtualPort.Read(datagram.Buffer[1]);
+	var sourcePort = PrudpVirtualPort.Deserialize(datagram.Buffer[0]);
+	var destinationPort = PrudpVirtualPort.Deserialize(datagram.Buffer[1]);
 	var (type, flags) = PrudpPacketTypeAndFlags.Deserialize(datagram.Buffer[2]);
 
 	Console.WriteLine("StreamId: {0}\tStreamType: {1}\t// Source port", sourcePort.StreamId, sourcePort.StreamType);
