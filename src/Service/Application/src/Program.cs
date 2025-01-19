@@ -1,5 +1,6 @@
 ﻿using Redplcs.GestapoOnline.Service.PrudpProtocol;
 using System.Net.Sockets;
+using System.Text;
 
 const int listeningPort = 30065;
 const string password = "7fas5";
@@ -26,6 +27,18 @@ while (true)
 	Console.WriteLine("FragmentId: {0}", request.FragmentId);
 	Console.WriteLine("PayloadSize: {0}", request.PayloadSize);
 	Console.WriteLine("Raw: {0}", BitConverter.ToString(datagram.Buffer));
+
+	var reply = new PrudpPacket
+	{
+		SourcePort = request.DestinationPort,
+		DestinationPort = request.SourcePort,
+		Type = request.Type,
+		Flags = PrudpPacketFlags.Ack,
+		Signature = 1,
+		ConnectionSignature = 1,
+	};
+
+	listener.Send(PrudpPacket.Serialize(reply, Encoding.ASCII.GetBytes(password)), datagram.RemoteEndPoint);
 
 	Console.WriteLine();
 }

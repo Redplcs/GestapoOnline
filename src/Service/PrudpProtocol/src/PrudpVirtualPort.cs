@@ -8,6 +8,14 @@ public struct PrudpVirtualPort
 	public byte StreamId { get; set; }
 	public PrudpStreamType StreamType { get; set; }
 
+	public static byte Serialize(PrudpVirtualPort port)
+	{
+		var streamIdMasked = port.StreamId & StreamIdMask;
+		var streamTypeInt = (int)port.StreamType;
+
+		return (byte)((streamTypeInt << StreamTypeShiftBy) | streamIdMasked);
+	}
+
 	public static PrudpVirtualPort Deserialize(byte data)
 	{
 		return new PrudpVirtualPort()

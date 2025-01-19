@@ -17,6 +17,24 @@ public struct PrudpPacket
 	public Memory<byte> Payload { get; set; }
 	public byte Checksum { get; set; }
 
+	public static byte[] Serialize(PrudpPacket packet, byte[] password)
+	{
+		var buffer = new byte[15];
+
+		buffer[0] = PrudpVirtualPort.Serialize(packet.SourcePort);
+		buffer[1] = PrudpVirtualPort.Serialize(packet.DestinationPort);
+		buffer[2] = PrudpPacketTypeAndFlags.Serialize(packet.Type, packet.Flags);
+		buffer[3] = packet.SessionId;
+
+		BinaryPrimitives.WriteUInt32LittleEndian(buffer[4..8], packet.Signature);
+		BinaryPrimitives.WriteUInt16LittleEndian(buffer[8..10], packet.SequenceId);
+		BinaryPrimitives.WriteUInt32LittleEndian(buffer[10..14], packet.ConnectionSignature!.Value);
+
+		buffer[^1] = PrudpChecksum.Calculate(buffer[..^1], password);
+
+		return buffer;
+	}
+
 	public static PrudpPacket Deserialize(byte[] data)
 	{
 		return Deserialize(data.AsSpan());
