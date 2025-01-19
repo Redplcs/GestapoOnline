@@ -13,6 +13,7 @@ while (true)
 
 	var sourcePort = PrudpVirtualPort.Read(receiveResult.Buffer[0]);
 	var destinationPort = PrudpVirtualPort.Read(receiveResult.Buffer[1]);
+	var (type, flags) = PrudpPacketTypeAndFlags.Deserialize(receiveResult.Buffer[2]);
 
 	LogVirtualPort(sourcePort, nameof(sourcePort));
 	LogVirtualPort(destinationPort, nameof(destinationPort));
