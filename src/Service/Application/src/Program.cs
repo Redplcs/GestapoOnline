@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 
 const int listeningPort = 30065;
-var password = "7fas5"u8;
+const string password = "7fas5";
 
 using var listener = new UdpClient(listeningPort);
 
@@ -12,16 +12,19 @@ while (true)
 
 	Console.WriteLine("Received packet with {0} bytes from '{1}'.", datagram.Buffer.Length, datagram.RemoteEndPoint);
 
-	var sourcePort = PrudpVirtualPort.Deserialize(datagram.Buffer[0]);
-	var destinationPort = PrudpVirtualPort.Deserialize(datagram.Buffer[1]);
-	var (type, flags) = PrudpPacketTypeAndFlags.Deserialize(datagram.Buffer[2]);
-	var checksum = PrudpChecksum.Calculate(datagram.Buffer.AsSpan()[..^1], password);
+	var request = PrudpPacket.Deserialize(datagram.Buffer);
 
-	Console.WriteLine("StreamId: {0}\tStreamType: {1}\t// Source port", sourcePort.StreamId, sourcePort.StreamType);
-	Console.WriteLine("StreamId: {0}\tStreamType: {1}\t// Destination port", destinationPort.StreamId, destinationPort.StreamType);
-	Console.WriteLine("Type: {0}", type);
-	Console.WriteLine("Flags: {0}", flags);
-	Console.WriteLine("Received checksum: {0}\tCalculated checksum: {1}", datagram.Buffer[^1], checksum);
+	Console.WriteLine("StreamId: {0}\tStreamType: {1}\t// Source port", request.SourcePort.StreamId, request.SourcePort.StreamType);
+	Console.WriteLine("StreamId: {0}\tStreamType: {1}\t// Destination port", request.DestinationPort.StreamId, request.DestinationPort.StreamType);
+	Console.WriteLine("Type: {0}", request.Type);
+	Console.WriteLine("Flags: {0}", request.Flags);
+	Console.WriteLine("SessionId: {0}", request.SessionId);
+	Console.WriteLine("Signature: {0}", request.Signature);
+	Console.WriteLine("SequenceId: {0}", request.SequenceId);
+	Console.WriteLine("Checksum: {0}", request.Checksum);
+	Console.WriteLine("ConnectionSignature: {0}", request.ConnectionSignature);
+	Console.WriteLine("FragmentId: {0}", request.FragmentId);
+	Console.WriteLine("PayloadSize: {0}", request.PayloadSize);
 	Console.WriteLine("Raw: {0}", BitConverter.ToString(datagram.Buffer));
 
 	Console.WriteLine();
