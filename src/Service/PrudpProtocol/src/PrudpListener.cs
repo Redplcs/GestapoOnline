@@ -1,20 +1,30 @@
 ﻿using System.Net;
+using System.Net.Sockets;
 
 namespace Redplcs.GestapoOnline.Service.PrudpProtocol;
 
-public sealed class PrudpListener
+public sealed class PrudpListener : IAsyncDisposable
 {
+	private readonly UdpClient _client;
+
 	public PrudpListener(int port)
 	{
-		LocalEndPoint = new IPEndPoint(IPAddress.Any, port);
+		_client = new UdpClient(port);
 	}
 
-	public IPEndPoint LocalEndPoint { get; }
+	public IPEndPoint LocalEndPoint => (IPEndPoint)_client.Client.LocalEndPoint!;
 
-	public ValueTask<PrudpConnection> AcceptConnectionAsync(CancellationToken cancellationToken = default)
+	public async ValueTask<PrudpConnection> AcceptConnectionAsync(CancellationToken cancellationToken = default)
 	{
-		var remoteEndPoint = new IPEndPoint(IPAddress.Any, port: 0);
-		var connection = new PrudpConnection(remoteEndPoint);
-		return ValueTask.FromResult(connection);
+		var receiveResult = await _client.ReceiveAsync(cancellationToken).ConfigureAwait(false);
+
+		return new PrudpConnection(receiveResult.RemoteEndPoint);
+	}
+
+	public ValueTask DisposeAsync()
+	{
+		_client.Dispose();
+
+		return ValueTask.CompletedTask;
 	}
 }
