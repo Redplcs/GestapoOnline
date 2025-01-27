@@ -51,7 +51,10 @@ internal struct PrudpPacketHeader
 
 	private readonly void WriteTypeAndFlags(Span<byte> buffer)
 	{
+		var maskType = (int)Type & 0b111;
+		var maskFlags = (int)Flags << 3;
 
+		buffer[0] = (byte)(maskType | maskFlags);
 	}
 
 	public static PrudpPacketHeader Read(ReadOnlySpan<byte> buffer)
