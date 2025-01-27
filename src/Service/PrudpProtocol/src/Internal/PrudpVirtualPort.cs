@@ -1,5 +1,8 @@
-﻿namespace Redplcs.GestapoOnline.Service.PrudpProtocol.Internal;
+﻿using System.Diagnostics;
 
+namespace Redplcs.GestapoOnline.Service.PrudpProtocol.Internal;
+
+[DebuggerDisplay("StreamId = {StreamId}, StreamType = {StreamType}")]
 internal struct PrudpVirtualPort
 {
 	public byte StreamId { get; set; }
