@@ -15,6 +15,45 @@ internal struct PrudpPacketHeader
 	public byte? FragmentId { get; set; }
 	public ushort? PayloadSize { get; set; }
 
+	public readonly void Write(Span<byte> buffer)
+	{
+		SourcePort.Write(buffer[0..1]);
+		DestinationPort.Write(buffer[1..2]);
+		WriteTypeAndFlags(buffer[2..3]);
+		buffer[3] = SessionId;
+		BinaryPrimitives.WriteUInt32LittleEndian(buffer[4..8], Signature);
+		BinaryPrimitives.WriteUInt16LittleEndian(buffer[8..10], SequenceId);
+
+		switch (Type)
+		{
+			case PrudpPacketType.Syn:
+			case PrudpPacketType.Connect:
+				BinaryPrimitives.WriteUInt32LittleEndian(buffer[10..14], ConnectionSignature!.Value);
+				break;
+
+			case PrudpPacketType.Data:
+				buffer[10] = FragmentId!.Value;
+				break;
+		}
+
+		if (Flags.HasFlag(PrudpPacketFlags.HasSize))
+		{
+			var slice = Type switch
+			{
+				PrudpPacketType.Syn or PrudpPacketType.Connect => buffer[14..16],
+				PrudpPacketType.Data => buffer[11..13],
+				_ => buffer[10..12],
+			};
+
+			BinaryPrimitives.WriteUInt32LittleEndian(slice, PayloadSize!.Value);
+		}
+	}
+
+	private readonly void WriteTypeAndFlags(Span<byte> buffer)
+	{
+
+	}
+
 	public static PrudpPacketHeader Read(ReadOnlySpan<byte> buffer)
 	{
 		var header = new PrudpPacketHeader();
