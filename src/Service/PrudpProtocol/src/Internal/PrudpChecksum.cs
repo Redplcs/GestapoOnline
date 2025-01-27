@@ -1,9 +1,9 @@
 ﻿using System.Numerics.Tensors;
 using System.Runtime.InteropServices;
 
-namespace Redplcs.GestapoOnline.Service.PrudpProtocol;
+namespace Redplcs.GestapoOnline.Service.PrudpProtocol.Internal;
 
-public static class PrudpChecksum
+internal static class PrudpChecksum
 {
 	public static byte Calculate(ReadOnlySpan<byte> data, ReadOnlySpan<byte> password)
 	{
