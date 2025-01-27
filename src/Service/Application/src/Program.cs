@@ -1,11 +1,12 @@
 ﻿using Redplcs.GestapoOnline.Service.PrudpProtocol;
+using System.Text;
 
 const int listeningPort = 30065;
 const string password = "7fas5";
 
 //using var listener = new UdpClient(listeningPort);
 
-var listener = new PrudpListener(listeningPort);
+var listener = new PrudpListener(listeningPort, Encoding.UTF8.GetBytes(password));
 
 Console.WriteLine("Listening for incoming connection at port {0}", listener.LocalEndPoint.Port);
 
