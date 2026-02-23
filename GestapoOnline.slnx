@@ -3,4 +3,11 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Prudp/Redplcs.GestapoOnline.Prudp.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/Directory.Build.props" />
+    <Project Path="tests/Prudp/Redplcs.GestapoOnline.Prudp.Tests.csproj" />
+  </Folder>
 </Solution>
